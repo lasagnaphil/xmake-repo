@@ -1,4 +1,4 @@
-package("imgui-glfw-opengl3")
+package("imgui-sdl-opengl3")
 
     set_homepage("https://github.com/ocornut/imgui")
     set_description("Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies")
@@ -18,23 +18,22 @@ package("imgui-glfw-opengl3")
         package:add("deps", "glad")
         package:add("defines", "IMGUI_IMPL_OPENGL_LOADER_CUSTOM")
         package:add("defines", "IMGUI_IMPL_OPENGL_LOADER_GLAD")
-        package:add("deps", "glfw")
+        package:add("deps", "libsdl")
         package:set("urls", {"https://github.com/ocornut/imgui.git"})
     end)
 
     on_install("macosx", "linux", "windows", "mingw", "android", "iphoneos", function (package)
-        local xmake_lua
-        xmake_lua = [[
+        local xmake_lua = [[
             add_rules("mode.debug", "mode.release")
             add_rules("utils.install.cmake_importfiles")
-            add_requires("glfw", "glad")
+            add_requires("libsdl", "glad")
             target("imgui-glfw-opengl3")
                 set_kind("static")
-                add_files("*.cpp", "backends/imgui_impl_glfw.cpp", "backends/imgui_impl_opengl3.cpp")
-                add_packages("glfw", "glad")
+                add_files("*.cpp", "backends/imgui_impl_sdl.cpp", "backends/imgui_impl_opengl3.cpp")
+                add_packages("libsdl", "glad")
                 add_includedirs(".")
                 add_headerfiles("*.h")
-                add_headerfiles("backends/imgui_impl_glfw.h", "backends/imgui_impl_opengl3.h")
+                add_headerfiles("backends/imgui_impl_sdl.h", "backends/imgui_impl_opengl3.h")
         ]]
 
         io.writefile("xmake.lua", xmake_lua)
